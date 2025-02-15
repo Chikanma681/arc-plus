@@ -6,6 +6,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { HydrateClient } from "@/trpc/server";
 import { ClerkProvider } from "@clerk/nextjs";
 import { SiteHeader } from "./_components/site-header";
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "ArcPlus",
@@ -30,6 +31,7 @@ export default function RootLayout({
     <div className="relative flex min-h-screen flex-col space-y-12 bg-black text-white">
       <SiteHeader />
               {children}
+              <Toaster />
             </div>
             </HydrateClient>    
         </TRPCReactProvider>

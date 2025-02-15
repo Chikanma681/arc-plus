@@ -9,7 +9,7 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 export function SiteHeader() {
   const pathname = usePathname()
   const isAuthPage = pathname === "/sign-in" || pathname === "/sign-up"
-
+  const dashboard = pathname === "/dashboard"
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -44,7 +44,11 @@ export function SiteHeader() {
             )}
           </SignedOut>
           <SignedIn>
-            <UserButton afterSignOutUrl="/" />
+          {!dashboard && (<Button size="sm" className="bg-white hover:bg-gray-200 text-black" asChild>
+                  <Link href="/dashboard">Dashboard</Link>
+                </Button>)
+          } 
+            <UserButton />
           </SignedIn>
         </div>
       </div>

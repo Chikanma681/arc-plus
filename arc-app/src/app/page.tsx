@@ -4,7 +4,6 @@ import { SiteHeader } from "./_components/site-header"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { Bus, CreditCard, Smartphone, Clock } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 
 export default function Home() {

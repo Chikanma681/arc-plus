@@ -48,6 +48,8 @@ switch (eventType) {
         await db.insert(users).values({
                 userId: evt.data.id, 
                 email: evt.data.email_addresses[0]!.email_address,
+                firstName: evt.data.first_name,
+                lastName: evt.data.last_name
         }).execute();
         break;
     default: {
