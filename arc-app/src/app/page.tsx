@@ -5,11 +5,10 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { Bus, CreditCard, Smartphone, Clock } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function Home() {
   return (
-    <div className="relative flex min-h-screen flex-col space-y-12 bg-black text-white">
-      <SiteHeader />
       <main className="flex-1 flex flex-col items-center justify-center">
         {/* Hero Section */}
         <section className="w-full flex flex-col items-center justify-center space-y-10 py-24">
@@ -44,8 +43,8 @@ export default function Home() {
               transition={{ delay: 0.6 }}
               className="flex gap-4"
             >
-              <Button size="lg" className="h-12 px-8 bg-white text-black hover:bg-gray-200">
-                Get Started
+              <Button size="lg" asChild className="h-12 px-8 bg-white text-black hover:bg-gray-200">
+                <Link href="/sign-up">Get Started</Link>
               </Button>
               <Button size="lg" variant="outline" className="h-12 px-8 bg-black text-white hover:bg-white/10">
                 Learn More
@@ -58,8 +57,8 @@ export default function Home() {
             transition={{ delay: 0.7 }}
             className="relative w-full max-w-3xl mt-8"
           >
-            <Image
-              src="/placeholder.svg?height=600&width=800"
+            <img
+              src="https://gisgeography.com/wp-content/uploads/2023/02/Edmonton-Road-Map.jpg"
               width={800}
               height={600}
               alt="ArcPlus App Interface"
@@ -121,13 +120,12 @@ export default function Home() {
             <p className="max-w-[85%] leading-normal text-gray-400 sm:text-lg sm:leading-7">
               Join thousands of Edmonton residents enjoying stress-free public transit.
             </p>
-            <Button size="lg" className="h-12 px-8 mt-8 bg-white text-black hover:bg-gray-200">
-              Get Started Now
+            <Button size="lg" asChild className="h-12 px-8 mt-8 bg-white text-black hover:bg-gray-200">
+              <Link href="/sign-up">Get Started Now</Link>
             </Button>
           </motion.div>
         </section>
       </main>
-    </div>
   )
 }
 

@@ -4,10 +4,11 @@ import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Bus } from "lucide-react"
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 
 export function SiteHeader() {
   const pathname = usePathname()
-  const isAuthPage = pathname === "/signin" || pathname === "/register"
+  const isAuthPage = pathname === "/sign-in" || pathname === "/sign-up"
 
   return (
     <motion.header
@@ -29,16 +30,23 @@ export function SiteHeader() {
           </motion.span>
         </Link>
         
-        {!isAuthPage && (
-          <div className="flex items-center space-x-4 pr-4">
-            <Button variant="outline" size="sm" asChild className="text-white border-white bg-black hover:text-gray-200">
-              <Link href="/signin">Log in</Link>
-            </Button>
-            <Button size="sm" className="bg-white hover:bg-gray-200 text-black" asChild>
-              <Link href="/register">Get Started</Link>
-            </Button>
-          </div>
-        )}
+        <div className="flex items-center space-x-4 pr-4">
+          <SignedOut>
+            {!isAuthPage && (
+              <>
+                <Button variant="outline" size="sm" asChild className="text-white border-white bg-black hover:text-gray-200">
+                  <Link href="/sign-in">Log in</Link>
+                </Button>
+                <Button size="sm" className="bg-white hover:bg-gray-200 text-black" asChild>
+                  <Link href="/sign-up">Get Started</Link>
+                </Button>
+              </>
+            )}
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+        </div>
       </div>
     </motion.header>
   )
