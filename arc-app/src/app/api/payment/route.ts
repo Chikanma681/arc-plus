@@ -22,11 +22,14 @@ export async function POST(req: Request) {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?canceled=true`,
+      ui_mode: "embedded",
+      // success_url: `http://localhost:3000/dashboard?success=true`,
+      return_url: `http://localhost:3000/dashboard?success=true`,
     })
 
-    return NextResponse.json({ sessionId: session.id })
+    console.log("Created Stripe session:", session.id)
+
+    return NextResponse.json({clientSecret: session.client_secret,})
   } catch (err) {
     console.error("Stripe error:", err)
     return NextResponse.json(
