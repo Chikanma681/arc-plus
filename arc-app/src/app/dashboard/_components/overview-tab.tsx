@@ -54,9 +54,9 @@ export function OverviewTab() {
                 </p>
               </div>
               <p className={`text-sm font-medium ${
-                transaction.amount < 0 ? 'text-red-500' : 'text-green-500'
+                Number(transaction.amount) < 0 ? 'text-red-500' : 'text-green-500'
               }`}>
-                {formatCurrency(transaction.amount)}
+                {formatCurrency(Number(transaction.amount))}
               </p>
             </div>
           ))}
