@@ -9,8 +9,8 @@ import {
   pgEnum,
   timestamp,
   numeric,
-  uuid,
   varchar,
+  serial,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -24,16 +24,17 @@ export const createTable = pgTableCreator((name) => `arc-app_${name}`);
 export const users = createTable(
   "users",
   {
-    id: uuid("id").default(sql`gen_random_uuid()`).primaryKey(),
+    id: serial("id").primaryKey(),
     userId: varchar("user_id", { length: 256 }).unique().notNull(),
-    email: varchar("email", { length: 256 }),
+    email: varchar("email", { length: 256 }).unique().notNull(),
     firstName: varchar("first_name", { length: 256 }),
     lastName: varchar("last_name", { length: 256 }),
   }
 );
+
 export const nfcCards = createTable("nfc_cards", {
-  id: uuid("id").default(sql`gen_random_uuid()`).primaryKey(),
-  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }),
   cardNumber: varchar("card_number", { length: 32 }).notNull().unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 },
@@ -42,28 +43,27 @@ export const nfcCards = createTable("nfc_cards", {
   cardNumberIdx: index("card_number_idx").on(table.cardNumber),
 }));
 
-const transactionStatus = pgEnum('transaction_status', [
-  'pending',
-  'completed',
-  'failed',
-  'refunded'
-]);
-
-
 export const transactions = createTable("transactions", {
-  id: uuid("id").default(sql`gen_random_uuid()`).primaryKey(),
-  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
-  cardId: uuid("card_id").references(() => nfcCards.id, { onDelete: "set null" }),
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }),
+  cardId: integer("card_id").references(() => nfcCards.id, { onDelete: "set null" }),
   amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
-  status: transactionStatus("status").default('pending'),
-  stripePaymentId: varchar("stripe_payment_id", { length: 256 }).unique(),
+  status: varchar("status"),
+  stripePaymentId: varchar("stripe_payment_id", { length: 256 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const wallet = createTable("wallet", {
-  id: uuid("id").default(sql`gen_random_uuid()`).primaryKey(),
-  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }),
   balance: numeric("balance", { precision: 10, scale: 2 }).default('0').notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const products = createTable("products", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }).notNull(),
+  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});

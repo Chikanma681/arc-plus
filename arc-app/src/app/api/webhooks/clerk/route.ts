@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import { db } from "@/server/db";
-import { users } from "@/server/db/schema";
-
+import { users, wallet } from "@/server/db/schema";
+import { eq } from "drizzle-orm";
 import type { WebhookEvent } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -45,13 +45,22 @@ const eventType = evt.type;
 
 switch (eventType) {
     case "user.created": 
-        await db.insert(users).values({
-                userId: evt.data.id, 
-                email: evt.data.email_addresses[0]!.email_address,
-                firstName: evt.data.first_name,
-                lastName: evt.data.last_name
-        }).execute();
-        break;
+    const [user] = await db.insert(users).values({
+      userId: evt.data.id, 
+      email: evt.data.email_addresses[0]!.email_address,
+      firstName: evt.data.first_name,
+      lastName: evt.data.last_name
+    }).returning(); 
+    
+    console.log("User being called:", user);
+    
+    if (user) {
+      await db.insert(wallet).values({
+        userId: user.id, 
+        balance: '0',
+      });
+    }
+    break;
     default: {
         console.error(`The event type: ${eventType} is not configured`);
     }
