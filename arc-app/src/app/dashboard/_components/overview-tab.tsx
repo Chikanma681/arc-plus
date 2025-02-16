@@ -2,28 +2,16 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Wallet, ContactIcon } from "lucide-react"
+import { api } from "@/trpc/react"
+import { useEffect, useState } from "react"
+import { formatCurrency } from "@/lib/utils"
+import { format } from "date-fns"
 
-
-const transactions = [
-    {
-      description: "Bus Ride - Route 4",
-      date: "Mar 15, 2024 at 9:30 AM",
-      amount: "-$3.50"
-    },
-    {
-      description: "Added Funds",
-      date: "Mar 14, 2024 at 2:15 PM",
-      amount: "+$50.00"
-    },
-    {
-      description: "Bus Ride - Route 7",
-      date: "Mar 14, 2024 at 8:45 AM",
-      amount: "-$3.50"
-    },
-  ] as const
-
-  
 export function OverviewTab() {
+  const { data: walletData } = api.wallet.getWalletBalance.useQuery()
+  const { data: cardsData } = api.wallet.getActiveCards.useQuery()
+  const { data: recentTransactions } = api.wallet.getRecentTransactions.useQuery()
+
   return (
     <div className="flex flex-col gap-8 w-3/4 ">
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -33,10 +21,8 @@ export function OverviewTab() {
           <Wallet className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">$245.00</div>
-          <p className="text-xs text-muted-foreground">
-            +20.1% from last month
-          </p>
+          <div className="text-2xl font-bold">{formatCurrency(walletData?.balance ?? 0)}</div>
+          {/* Removed percentage change since we don't track historical balances yet */}
         </CardContent>
       </Card>
       <Card>
@@ -45,7 +31,7 @@ export function OverviewTab() {
           <ContactIcon className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">2</div>
+          <div className="text-2xl font-bold">{cardsData?.length ?? 0}</div>
           <p className="text-xs text-muted-foreground">
             Physical & Digital cards
           </p>
@@ -59,16 +45,18 @@ export function OverviewTab() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {transactions.map((transaction, index) => (
-            <div key={index} className="flex items-center justify-between border-b pb-4">
+          {recentTransactions?.map((transaction) => (
+            <div key={transaction.id} className="flex items-center justify-between border-b pb-4">
               <div className="space-y-1">
-                <p className="text-sm font-medium">{transaction.description}</p>
-                <p className="text-xs text-muted-foreground">{transaction.date}</p>
+                <p className="text-sm font-medium">{transaction.status}</p>
+                <p className="text-xs text-muted-foreground">
+                  {format(new Date(transaction.createdAt), "MMM d, yyyy 'at' h:mm a")}
+                </p>
               </div>
               <p className={`text-sm font-medium ${
-                transaction.amount.startsWith('-') ? 'text-red-500' : 'text-green-500'
+                transaction.amount < 0 ? 'text-red-500' : 'text-green-500'
               }`}>
-                {transaction.amount}
+                {formatCurrency(transaction.amount)}
               </p>
             </div>
           ))}
@@ -76,6 +64,5 @@ export function OverviewTab() {
       </CardContent>
     </Card>
     </div>
-
   )
-} 
+}
