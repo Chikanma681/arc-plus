@@ -1,5 +1,5 @@
-import time
 import board
+import time
 import busio
 from adafruit_pn532.i2c import PN532_I2C
 import requests
@@ -93,22 +93,24 @@ def send_request(card_no):
         print("🚨 Invalid JSON Response Received")
         error_feedback()
 
-# Keep running the loop even if an error occurs
-while True:
-    try:
-        print("\nWaiting for NFC card...")  # Print after each attempt
-        card_no = read_nfc()
-        if card_no:
-            print(f"Found NFC card: {card_no}")
-            send_request(card_no)
+try:
+    # Keep running the loop until interrupted
+    while True:
+        try:
+            print("\nWaiting for NFC card...")  # Print after each attempt
+            card_no = read_nfc()
+            if card_no:
+                print(f"Found NFC card: {card_no}")
+                send_request(card_no)
 
-        time.sleep(1)  # Short delay before the next scan
-    except Exception as e:
-        print(f"⚠️ Unexpected Error: {e}")
-        time.sleep(2)  # Give it a moment before retrying
+            time.sleep(1)  # Short delay before the next scan
+        except Exception as e:
+            print(f"⚠️ Unexpected Error: {e}")
+            time.sleep(2)  # Give it a moment before retrying
 
-# Cleanup on exit
 except KeyboardInterrupt:
+    print("\nProgram terminated by user")
+finally:
     print("Cleaning up GPIO")
     buzzer_pwm.stop()
     GPIO.cleanup()
