@@ -14,7 +14,7 @@ export function OverviewTab() {
   const { data: recentTransactions, isLoading: isTransactionsLoading } = api.wallet.getRecentTransactions.useQuery()
 
   return (
-    <div className="flex flex-col gap-8 w-3/4 ">
+    <div className="flex flex-col gap-8">
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
