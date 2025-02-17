@@ -7,7 +7,7 @@ import { api } from "@/trpc/react"
 import { formatCurrency } from "@/lib/utils"
 
 export function WalletTab() {
-  const { data: walletData } = api.wallet.getWalletBalance.useQuery()
+  const { data: walletData, isLoading } = api.wallet.getWalletBalance.useQuery()
 
   return (
     <Card>
@@ -19,21 +19,21 @@ export function WalletTab() {
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <p className="text-sm font-medium">Current Balance</p>
-            <p className="text-2xl font-bold">{formatCurrency(walletData?.balance ?? 0)}</p>
+            <p className="text-2xl font-bold">
+              {isLoading ? (
+                <div className="h-8 w-24 bg-muted rounded animate-pulse" />
+              ) : (
+                formatCurrency(walletData?.balance ?? 0)
+              )}
+            </p>
           </div>
           <AddFundsDialog />
         </div>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">Apple Wallet</p>
-            <Button variant="outline">
-              Add to Apple Wallet
-            </Button>
-          </div>
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">Auto-reload</p>
-            <Button variant="outline">Set up</Button>
-          </div>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium">Apple Wallet</p>
+          <Button variant="outline">
+            Add to Apple Wallet
+          </Button>
         </div>
       </CardContent>
     </Card>

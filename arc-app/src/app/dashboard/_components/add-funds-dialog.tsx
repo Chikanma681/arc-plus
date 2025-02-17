@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { loadStripe } from "@stripe/stripe-js"
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js'
 import { toast } from "sonner"
+import { api } from "@/trpc/react"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
@@ -20,6 +21,7 @@ export function AddFundsDialog() {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const utils = api.useUtils()
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -64,6 +66,8 @@ export function AddFundsDialog() {
       setClientSecret(null)
       setAmount("")
       setLoading(false)
+      // Refetch wallet data when dialog closes to ensure balance is up to date
+      void utils.wallet.getWalletBalance.invalidate()
     }
   }
 
