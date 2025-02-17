@@ -1,0 +1,57 @@
+{
+  "formatVersion": 1,
+  "passTypeIdentifier": "pass.com.arcplus.transit",
+  "serialNumber": "SERIAL_NUMBER",
+  "teamIdentifier": "ARC123456",
+  "organizationName": "Arc Plus Transit",
+  "description": "Arc Plus Transit Card",
+  "logoText": "Arc Plus Transit",
+  "foregroundColor": "rgb(255, 255, 255)",
+  "backgroundColor": "rgb(0, 0, 0)",
+  "labelColor": "rgb(255, 255, 255)",
+  "barcode": {
+    "message": "QRCODE_PLACEHOLDER",
+    "format": "PKBarcodeFormatQR",
+    "messageEncoding": "utf-8",
+    "altText": "CARD_NUMBER"
+  },
+  "generic": {
+    "headerFields": [
+      {
+        "key": "header",
+        "label": "Transit Card",
+        "value": "CARD_NUMBER"
+      }
+    ],
+    "primaryFields": [
+      {
+        "key": "balance",
+        "label": "Balance",
+        "value": "BALANCE",
+        "textAlignment": "PKTextAlignmentCenter"
+      }
+    ],
+    "secondaryFields": [
+      {
+        "key": "name",
+        "label": "Card Holder",
+        "value": "USER_NAME"
+      }
+    ],
+    "auxiliaryFields": [
+      {
+        "key": "cardType",
+        "label": "Type",
+        "value": "Transit Card"
+      }
+    ]
+  },
+  "nfc": {
+    "message": "CARD_NUMBER",
+    "encryptionPublicKey": "MIIB...",
+    "requiresAuthentication": false
+  },
+  "authenticationToken": "arcplus-transit-token",
+  "webServiceURL": "https://arcplus.vercel.app",
+  "maxDistance": 100
+}

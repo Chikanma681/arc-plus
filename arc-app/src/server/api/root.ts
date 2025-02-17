@@ -1,6 +1,7 @@
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { walletRouter } from "./routers/wallet";
 import { nfcRouter } from "./routers/nfc";
+import { passRouter } from "./routers/pass";
 
 /**
  * This is the primary router for your server.
@@ -10,6 +11,7 @@ import { nfcRouter } from "./routers/nfc";
 export const appRouter = createTRPCRouter({
   wallet: walletRouter,
   nfc: nfcRouter,
+  pass: passRouter,
 });
 
 // export type definition of API
