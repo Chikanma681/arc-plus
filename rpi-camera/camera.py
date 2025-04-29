@@ -37,7 +37,7 @@ camera_config = picam2.create_preview_configuration()
 picam2.configure(camera_config)
 picam2.start()
 
-WEBHOOK_URL = "https://238d-2620-101-c040-7e5-5c6a-5224-e630-7814.ngrok-free.app/api/webhooks/nfc"
+WEBHOOK_URL = "https://ac96-165-140-231-123.ngrok-free.app/api/webhooks/nfc"
 
 def play_success_sound():
     frequencies = [1000, 1500, 2000]
