@@ -5,6 +5,7 @@ import { useUser } from "@clerk/nextjs"
 import { useEffect, useState } from "react"
 import { formatCurrency } from "@/lib/utils"
 import { toast } from "sonner"
+import { api } from "@/trpc/react";
 
 type Transaction = {
   id: string
@@ -20,6 +21,11 @@ export function OverviewTab() {
   const [balance, setBalance] = useState(0)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
+
+  const { data: activeCards } =  api.wallet.getActiveCards.useQuery();
+
+
+  const activeCardCount = activeCards ? activeCards.length : 0;
 
   const fetchData = async () => {
     if (!user) return
@@ -97,7 +103,7 @@ export function OverviewTab() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1</div>
+            <div className="text-2xl font-bold">{activeCardCount}</div>
             <p className="text-xs text-muted-foreground">
               Physical & Digital cards
             </p>
